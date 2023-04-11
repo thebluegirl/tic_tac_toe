@@ -7,17 +7,13 @@ class Player
   @@player_symbols = ["X", "O"]
 
   attr_reader :symbol
-  attr_accessor :name
+  attr_accessor :name, :player_array
 
   def initialize(name)
-    if @@num_of_players <= 2
-      @name = name
-      @symbol = player_symbol
-      @@num_of_players += 1  
-    else
-      return puts "Maximum players attained. Something isn't right here..."
-    end
-    
+    @name = name
+    @symbol = player_symbol
+    @player_array  = [@name, @symbol]
+    @@num_of_players += 1  
   end
 
   protected 
@@ -31,15 +27,19 @@ class Player
 
   public
   def to_s
-    "Player identifier: #{@name}, Player symbol: #{symbol}"
+    puts "Player identifier: #{@name}, Player symbol: #{@symbol}"
   end
 end
 
 class Game
+  attr_accessor :players_hash
+
   def initialize
     @board = Array.new(9)
+    @free_space = (0..8).to_a
     @player1 = Player.new("Player 1")
     @player2 = Player.new("Player 2")
+    @players_hash = [@player1.player_array, @player2.player_array].to_h
   end
   
   def print_board
@@ -55,4 +55,4 @@ class Game
 end
 
 game = Game.new
-game.print_board
+p game.players_hash
