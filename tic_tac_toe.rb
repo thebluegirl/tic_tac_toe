@@ -1,13 +1,13 @@
 module WinningLines
-  winning_lines = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
+  WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
 end
 
 class Player
   @@num_of_players = 0
   @@player_symbols = ["X", "O"]
 
-  attr_reader :symbol, :player_array
-  attr_accessor :name
+  attr_reader :symbol
+  attr_accessor :name, :player_array
 
   def initialize(name)
     @name = name
@@ -35,7 +35,7 @@ class Game
   include WinningLines
 
   attr_reader :players_hash
-  attr_accessor :board, :free_spaces 
+  attr_accessor :board, :free_spaces, :winner_present, :move_counter
 
   def initialize
     @board = Array.new(9)
@@ -43,6 +43,8 @@ class Game
     @player1 = Player.new("Player 1")
     @player2 = Player.new("Player 2")
     @players_hash = [@player1.player_array, @player2.player_array].to_h
+    @move_counter = 0
+    @winner_present = false
   end
   
   #protected
@@ -61,10 +63,11 @@ class Game
     print "\n"
   end
 
-  def winner_check
-    winning_lines.each do |array|
+  def win_check
+      WinningLines::WINNING_LINES.each do |array|
       if array[0] == array[1] && array[1] == array[2] && array[0].class == String
-        p "We have a winner!"
+        p "We have a winner_present"
+        @winner_present = true
       end
 
       if @free_spaces.empty?
@@ -86,14 +89,40 @@ class Game
       puts "This move has already been played. Please choose an available slot"
       self.player_move
     end
+    
+    if @move_counter.even?
+      @board[play_slot - 1] = players_hash.fetch("Player 1")
+      @move_counter += 1
+      p players_hash.fetch("Player 1")
+      p @board[play_slot - 1]
+    else
+      @board[play_slot - 1] = players_hash.fetch("Player 2")
+      @move_counter += 1
+      p players_hash.fetch("Player 2")
+      p @board[play_slot - 1]
+    end
+    
+    p players_hash
+    p @move_counter
 
-    @board[play_slot - 1] = players_hash[@player.name]
     free_spaces.delete(play_slot)
-    game.print_board
-    game.winner_check
+    self.print_board
+    self.win_check
+  end
+
+  public
+  def gameplay
+    until (@winner_present.class == TrueClass || @free_spaces.empty?) do
+      @players_hash.to_a.cycle do |player_info|
+        puts "#{player_info[0]}..."
+        p @free_spaces
+        p @board
+        self.player_move
+      end
+    end
   end
 end
 
 game = Game.new
-game.print_board
+game.gameplay
 # game.player_move
