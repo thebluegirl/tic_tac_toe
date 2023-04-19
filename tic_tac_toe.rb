@@ -65,13 +65,33 @@ class Game
 
   def win_check
       WinningLines::WINNING_LINES.each do |array|
-      if array[0] == array[1] && array[1] == array[2] && array[0].class == String
-        p "We have a winner_present"
+      if @board[array[0]] == @board[array[1]] && @board[array[1]] == @board[array[2]] && @board[array[0]].class == String
+        puts "We have a winner_present"
         @winner_present = true
+        return
       end
 
       if @free_spaces.empty?
-        p "It's a tie"
+        puts "It's a tie"
+        return
+      end
+    end
+  end
+
+  def game_end
+    if @free_spaces.empty?
+      puts "This game has ended. Would you like to play another?"
+      new_game_request = gets.chomp.downcase
+
+      p new_game_request
+      if new_game_request == "yes" || new_game_request == "y"
+        Game.new.gameplay
+      elsif new_game_request == "no" || new_game_request == "n"
+        puts "Thank you for playing. Goodbye"
+        exit
+      else
+        puts "I'm sorry, I do not understand. Please answer 'yes' or 'no'."
+        self.game_end
       end
     end
   end
@@ -93,17 +113,10 @@ class Game
     if @move_counter.even?
       @board[play_slot - 1] = players_hash.fetch("Player 1")
       @move_counter += 1
-      p players_hash.fetch("Player 1")
-      p @board[play_slot - 1]
     else
       @board[play_slot - 1] = players_hash.fetch("Player 2")
       @move_counter += 1
-      p players_hash.fetch("Player 2")
-      p @board[play_slot - 1]
     end
-    
-    p players_hash
-    p @move_counter
 
     free_spaces.delete(play_slot)
     self.print_board
@@ -118,6 +131,7 @@ class Game
         p @free_spaces
         p @board
         self.player_move
+        self.game_end
       end
     end
   end
