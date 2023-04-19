@@ -49,7 +49,7 @@ class Game
   
   #protected
   def print_board
-    @board.each_index do |idx, value|
+    @board.each_with_index do |value, idx|
       if idx == 3 || idx == 6
         print "\n"
       end
