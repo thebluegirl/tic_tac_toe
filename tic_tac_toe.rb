@@ -4,24 +4,22 @@ end
 
 class Player
   @@num_of_players = 0
-  @@player_symbols = ["X", "O"]
 
-  attr_reader :symbol
-  attr_accessor :name, :player_array
+  attr_accessor :name, :symbol ,:player_array
 
   def initialize(name)
     @name = name
-    @symbol = player_symbol
+    @symbol = self.player_symbol
     @player_array  = [@name, @symbol]
     @@num_of_players += 1  
   end
 
   protected 
   def player_symbol
-    if @@num_of_players < 1
-      @@player_symbols.shift
+    if @@num_of_players.even?
+      @symbol = "X"
     else
-      @@player_symbols.pop
+      @symbol = "O"
     end
   end
 
@@ -47,7 +45,7 @@ class Game
     @winner_present = false
   end
   
-  #protected
+  protected
   def print_board
     @board.each_with_index do |value, idx|
       if idx == 3 || idx == 6
@@ -69,19 +67,18 @@ class Game
         puts "WE HAVE OUR WINNER!!!"
         @winner_present = true
       end
-
-      if @free_spaces.empty?
-        puts "It's a tie"
-      end
     end
   end
 
   def game_end
+    if @free_spaces.empty?
+      puts "It's a tie."
+    end
+
     if @free_spaces.empty? || @winner_present == true
       puts "This game has ended. Would you like to play another?"
       new_game_request = gets.chomp.downcase
 
-      p new_game_request
       if new_game_request == "yes" || new_game_request == "y"
         Game.new.gameplay
       elsif new_game_request == "no" || new_game_request == "n"
@@ -100,12 +97,14 @@ class Game
 
     if play_slot > 9 || play_slot < 1
       puts "This move is out of bounds. Please choose a valid slot."
-      self.player_move 
+      self.player_move
+      return 
     end
 
-    if !free_spaces.include?(play_slot)
+    if !@free_spaces.include?(play_slot)
       puts "This move has already been played. Please choose an available slot"
       self.player_move
+      return
     end
     
     if @move_counter.even?
@@ -116,7 +115,7 @@ class Game
       @move_counter += 1
     end
 
-    free_spaces.delete(play_slot)
+    @free_spaces.delete(play_slot)
     self.print_board
     self.win_check
   end
@@ -133,8 +132,8 @@ class Game
       end
     end
   end
+  
 end
 
 game = Game.new
 game.gameplay
-# game.player_move
