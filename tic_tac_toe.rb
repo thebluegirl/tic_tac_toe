@@ -65,21 +65,19 @@ class Game
 
   def win_check
       WinningLines::WINNING_LINES.each do |array|
-      if @board[array[0]] == @board[array[1]] && @board[array[1]] == @board[array[2]] && @board[array[0]].class == String
-        puts "We have a winner_present"
+      if @board[array[0] - 1] == @board[array[1] - 1] && @board[array[1] - 1] == @board[array[2] - 1] && @board[array[0] - 1].class == String
+        puts "WE HAVE OUR WINNER!!!"
         @winner_present = true
-        return
       end
 
       if @free_spaces.empty?
         puts "It's a tie"
-        return
       end
     end
   end
 
   def game_end
-    if @free_spaces.empty?
+    if @free_spaces.empty? || @winner_present == true
       puts "This game has ended. Would you like to play another?"
       new_game_request = gets.chomp.downcase
 
