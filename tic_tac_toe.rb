@@ -125,8 +125,6 @@ class Game
     until (@winner_present.class == TrueClass || @free_spaces.empty?) do
       @players_hash.to_a.cycle do |player_info|
         puts "#{player_info[0]}..."
-        p @free_spaces
-        p @board
         self.player_move
         self.game_end
       end
