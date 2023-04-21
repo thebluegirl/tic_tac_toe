@@ -71,7 +71,7 @@ class Game
   end
 
   def game_end
-    if @free_spaces.empty?
+    if @free_spaces.empty? && !@winner_present
       puts "It's a tie."
     end
 
