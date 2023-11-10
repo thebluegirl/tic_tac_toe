@@ -14,7 +14,7 @@ class Player
     @@num_of_players += 1
   end
 
-  protected
+  # protected
   def player_symbol
     if @@num_of_players.even?
       @symbol = "X"
@@ -132,6 +132,3 @@ class Game
   end
 
 end
-
-# game = Game.new
-# game.gameplay
