@@ -11,10 +11,10 @@ class Player
     @name = name
     @symbol = self.player_symbol
     @player_array  = [@name, @symbol]
-    @@num_of_players += 1  
+    @@num_of_players += 1
   end
 
-  protected 
+  protected
   def player_symbol
     if @@num_of_players.even?
       @symbol = "X"
@@ -44,8 +44,8 @@ class Game
     @move_counter = 0
     @winner_present = false
   end
-  
-  protected
+
+  # protected
   def print_board
     @board.each_with_index do |value, idx|
       if idx == 3 || idx == 6
@@ -98,7 +98,7 @@ class Game
     if play_slot > 9 || play_slot < 1
       puts "This move is out of bounds. Please choose a valid slot."
       self.player_move
-      return 
+      return
     end
 
     if !@free_spaces.include?(play_slot)
@@ -106,7 +106,7 @@ class Game
       self.player_move
       return
     end
-    
+
     if @move_counter.even?
       @board[play_slot - 1] = players_hash.fetch("Player 1")
       @move_counter += 1
@@ -130,8 +130,8 @@ class Game
       end
     end
   end
-  
+
 end
 
-game = Game.new
-game.gameplay
+# game = Game.new
+# game.gameplay
