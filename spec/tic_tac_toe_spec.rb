@@ -1,4 +1,4 @@
-require './lib/tic_tac_toe.rb'
+require './lib/tic_tac_toe'
 
 describe Player do
   describe '#player_symbol' do
@@ -26,7 +26,7 @@ describe Game do
     context 'test win condition for top row' do
       before do
         board = game.instance_variable_get(:@board)
-        board[0] = board[1] = board[2] = "X"
+        board[0] = board[1] = board[2] = 'X'
       end
 
       it 'has a winner' do
